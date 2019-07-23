@@ -1,8 +1,14 @@
 use warnings;
 use strict;
-#perl ref.fasta .coverage .vcf
 
-my$ref="";
+##Author: ZHU O. Yuan (Genome Institute of Singapore)
+##Script name: 00_sample_vcf_to_consensus.pl
+##Usage: perl 00_sample_vcf_to_consensus.pl ref.fa sample.coverage sample.vcf
+
+##This script takes in reference sequence, blanks out bases with low coverage, and updates bases where VCF indicates a freq>0.5 SNP
+
+#Obtains reference sequence from ref.fasta
+my$ref=""; 
 open (REF, "$ARGV[0]") or die;
 while (my $line = <REF>) {
     chomp $line;
@@ -11,8 +17,8 @@ while (my $line = <REF>) {
 }close(REF);
 #print "$ref\n";
 
+#Masks low coverage bases <10x as 'N'
 my@lala=split('',$ref);
-#open(NOUT, '>>', $ARGV[2]);
 open (SAM, "$ARGV[1]") or die; #
 while (my $line = <SAM>) {
     chomp $line;
@@ -21,10 +27,11 @@ while (my $line = <SAM>) {
 	my@pos=split(':',$data[0]);
 	if($data[1] < 10){
 	    $lala[$pos[1]-1]="N";
-	}#print"$pos[1]\t";}
+	}
     }
 }close (SAM);
 
+#Updates base calls where SNP identified has frequency >0.5
 open (VCF, "$ARGV[2]") or die;
 while (my $line = <VCF>) {
     chomp $line;
@@ -42,6 +49,7 @@ while (my $line = <VCF>) {
     }
 }close (VCF);
 
+#prints out consensus sequence header and sequence
 my@header=split('\.',$ARGV[1]);
 my@id=split('\/',$header[0]);
 print ">$id[1]\n";
