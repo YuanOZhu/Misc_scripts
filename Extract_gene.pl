@@ -1,8 +1,11 @@
 use warnings;
 use strict;
 use Data::Dumper;
-#this script extracts relevant portion of sequence from reference
-#perl script.pl infile startpos endpos genename > outfile
+
+##Author: ZHU O. Yuan (Genome Institute of Singapore)
+##Script name: 01_extract_gene.pl
+##Usage: perl 01_extract_gene.pl consensus.multialigned.fasta startpos endpos gene-name > out.fasta
+#This script extracts relevant portion of sequence from reference
 #eg. perl 01_extract_gene.pl aligned.fasta 487 3018 P > aligned.P-gene.fasta 
 
 open(my$fi,$ARGV[0]) or die;
